@@ -1,0 +1,166 @@
+<!-- http://regist.hvnh.edu.vn/DangKyHocPhan/DanhSachLopHocPhan?id=Mf+JUvJrvLvxmfd0nJrDsQ==&registType=KH -->
+
+
+<script>
+    // da kiem tra
+    function doSubmit() {
+        document.forms.Frm.hdID.value = "";
+        for (var i = 0; i < document.forms.Frm.elements.length; i++) {
+            if (document.forms.Frm.elements[i].type == "radio") {
+                if (document.forms.Frm.elements[i].checked == true) {
+                    document.forms.Frm.hdID.value += document.forms.Frm.elements[i].id + "|";
+                }
+            }
+        }
+    }
+
+    // da kiem tra
+    // acceptConflict<bool> cho phep dang ky trung lich
+    // classStudyUnitConflictId<string> LHP dang trung lich
+    // registType<string> hinh thuc dang ky
+    function btnRegist_Click(acceptConflict, classStudyUnitConflictId, registType) {
+        $.ajax({
+            type: 'GET',
+            url: AddressUrl + '/DangKyHocPhan/DangKy?Hide=' + $('#chk_hidden').val() + '&acceptConflict=' + acceptConflict + '&classStudyUnitConflictId=' + classStudyUnitConflictId + '&RegistType=' + registType,
+            async: true,
+            dataType: 'json',
+            success: function (data) {
+                if (data.State) {// khi xu ly thanh cong
+                    if (data.Msg != "-1") {
+                        //DialogAlert("Thông báo", data.Msg, 'info');
+                        if (data.Obj == true) {// danh ky thanh cong
+                            alert(data.Msg);
+                            ToggleDislayStudyUnit(false); // tat moi layout
+                            GetClassStudyUnitRegisted(0); // llay tren ram, nguyen nhan la da reload lai khi dang ky thanh cong tren code server
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+                    }
+                }
+                else {
+                    XuLyTrungLich(data);
+                }
+            }
+        })
+    }
+
+    // da kiem tra
+    function XuLyTrungLich(data) {
+        if (data.Obj == 1) {
+            $.messager.confirm(
+                "Thông báo",
+                data.Msg,
+                function (r) {
+                    if (r) {// chon ok
+                        if (data.Obj == 1) {// cho phep dk trung lich
+                            btnRegist_Click(true, data.Obj1)// thuc hien lai lenh dang ky
+                        }
+                        else {
+                            btnRegist_Click(false, data.Obj1)// thuc hien lenh dang ky
+                        }
+                    }
+                    else {// chon cancel
+                        btnRegist_Click(false, data.Obj1)
+                    }
+                }
+            );
+        }
+        else {
+            DialogAlert("Thông báo", data.Msg, "info");
+        }
+    }
+
+    // da kiem tra
+    function btnBack() {
+        ToggleDislayStudyUnit(false);
+        $('#cnDanhSachLHP').html("");
+    }
+
+    function btnGetChildOfThis(id) {
+        if ($('#tr-of-' + id).css('display') == 'none') {
+            $('#tr-of-' + id).css('display', '');
+        }
+        else {
+            $('#tr-of-' + id).css('display', 'none');
+        }
+    }
+</script>
+
+<form name="Frm">
+    <fieldset>
+        <legend><b style="color:blue;font-size:14px">Học phần: Ph&#226;n t&#237;ch t&#224;i ch&#237;nh doanh nghiệp II </b></legend>
+        <div class="cn-study-unit">
+            <table class="table table-hover" style="border:1px solid #333;">
+                <thead>
+                    <tr>
+                        <th class="col-md-1">Chọn</th>
+                        <th class="col-md-1">Loại</th>
+                        <th class="col-md-1 hidden-xs">Mã LHP</th>
+                        <th class="col-md-2 hidden-xs">Lớp sinh hoạt</th>
+                        <th class="col-md-1 hidden-xs">Giới hạn</th>
+                        <th class="col-md-1 hidden-xs">SLĐK</th>
+                        <th class="col-md-2">GV</th>
+                        <th class="col-md-4">Lịch học</th>
+                        <th class="col-md-2">Số tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                <tr>
+                                    <td style="text-align:center">
+                                        <input onclick="btnGetChildOfThis('201FIN41A01')"
+                                               type="radio"
+                                               class="classCheckChon"
+                                               style="margin-top: -7px !important;"
+                                               id="Mf+JUvJrvLsyuzxIFQDIITtO9/78ZnkdUPLeU0njHc0="
+                                               name="theory"
+                                               
+                                                />
+                                    </td>
+                                    <td style="text-align:center">L&#253; thuyết</td>
+                                    <td class="hidden-xs" style="text-align:center"><b>201FIN41A01</b></td>
+                                    <td class="hidden-xs" style="text-align:left">K20TCA</td>
+                                    <td class="hidden-xs" style="text-align:center">40-70</td>
+                                    <td class="hidden-xs" style="text-align:center">44</td>
+                                    <td style="text-align:center"></td>
+                                    <td style="text-align:left">
+                                        <div class="td-schedule"> Thứ 2,ca 3,tuần 1-8,D6.303<br/>Thứ 4,ca 3,tuần 1-8,D6.211</div>
+                                    </td>
+                                    <th style="text-align:center"></th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center">
+                                        <input onclick="btnGetChildOfThis('201FIN41A02')"
+                                               type="radio"
+                                               class="classCheckChon"
+                                               style="margin-top: -7px !important;"
+                                               id="Mf+JUvJrvLt55kgssqMys6WsnRoamy6YXF0Gsh/yQBs="
+                                               name="theory"
+                                               
+                                                />
+                                    </td>
+                                    <td style="text-align:center">L&#253; thuyết</td>
+                                    <td class="hidden-xs" style="text-align:center"><b>201FIN41A02</b></td>
+                                    <td class="hidden-xs" style="text-align:left">K20TCB</td>
+                                    <td class="hidden-xs" style="text-align:center">40-75</td>
+                                    <td class="hidden-xs" style="text-align:center">57</td>
+                                    <td style="text-align:center"></td>
+                                    <td style="text-align:left">
+                                        <div class="td-schedule"> Thứ 2,ca 3,tuần 12-19,D6.404<br/>Thứ 4,ca 3,tuần 12-19,D6.205</div>
+                                    </td>
+                                    <th style="text-align:center"></th>
+                                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="pull-right">
+            <!-- bien tam, dung khi dang ky-->
+            <input type="hidden" id="chk_hidden" name="hdID" value="" />
+
+            <input style="width:80px" type="button" class="btn a_link btn-cus1" onclick="btnBack()" value="Quay về" />
+            <!--dang ky-->
+            <input style="width:80px" type="button" class="btn a_link btn-cus1" onclick="doSubmit(); btnRegist_Click(false,'','KH'); " value="Đăng ký" />
+        </div>
+    </fieldset>
+</form>
