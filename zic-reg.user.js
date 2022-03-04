@@ -1,21 +1,28 @@
+// ==UserScript==
+// @name         KIM ANH HVNH
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        http://regist.hvnh.edu.vn/*
+// @grant        unsafeWindow
+// ==/UserScript==
+
 // !important Quy trình đăng ký học
 /** Đầu tiền là chạy vòng lặp các môn học từ classList để lấy subjectId qua 2 lần check của regType KH và HB
     Khi có được subjectId thì chạy vòng lặp các lớp học của môn học đó để lấy classId
     Nếu tìm được classId thì đăng ký qua zicReg
 */
 
-const studyProgramId = '19ATCDN'
-
-// http://regist.hvnh.edu.vn/DangKyHocPhan/GetDanhSachHP?typeId=KH&studyProgramId=19ATCDN
-
 console.log('START!')
 // mã môn học (subject) : danh sách các lớp của môn đó (classCode), cả 2 được định danh bằng subjectId và classID
 window.classList = {
-    'ENG02A': ['212ENG02A01'],
-    'FIN10A': ['212FIN10A01'],
-    'FIN93A': ['212FIN93A01', ], // Thứ tự ưu tiên từ trước đến sau
-    'FIN25A': ['212FIN25A04', ],
-    'FIN30A': ['212FIN30A02'],
+    'ACT01A': ['212ACT01A01'],
+    // 'FIN51A': ['212FIN51A08'],
+    // 'FIN84A': ['212FIN84A01'],
+    // 'FIN93A': ['212FIN93A01',], // Thứ tự ưu tiên từ trước đến sau
+    // 'FIN25A': ['212FIN25A04',],
+    // 'FIN30A': ['212FIN30A02'],
 }
 window.regClasses = []
 
@@ -24,7 +31,7 @@ window.regClasses = []
 var autoIntv = setInterval(() => {
     zicAuto()
 
-    // console.clear()
+    console.clear()
 }, 800)
 
 // zicAuto()
@@ -32,10 +39,8 @@ var autoIntv = setInterval(() => {
 async function zicAuto() {
     try {
         // Ban đầu lấy danh sách môn học và danh sách lớp học
-        // let subjectsElem1 = $(await getSubjects('KH')) // Học phần bắt buộc
-        // let subjectsElem2 = $(await getSubjects('HB')) // Học phần tự chọn
-        let subjectsElem3 = $(await getSubjects2('HB')) // Học phần tự chọn v2 (28/12/2021)
-        let subjectsElem4 = $(await getSubjects2('KH')) // Học phần tự chọn v2 (28/12/2021)
+        let subjectsElem1 = $(await getSubjects('KH')) // Học phần bắt buộc
+        let subjectsElem2 = $(await getSubjects('HB')) // Học phần tự chọn
 
         let subjects = Object.keys(classList)
 
@@ -44,26 +49,14 @@ async function zicAuto() {
                 let subjectId = ''
                 let regType = ''
                 // <a href="javascript:GetClassStudyUnit('yB789N2t8+NOtTH6+dhX+A==','Tiếng Anh IV','HB')"><b>[Đăng ký]</b></a>
-                // subjectId = subjectsElem1.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem1.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
-                // regType = 'KH'
+                subjectId = subjectsElem1.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem1.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
+                regType = 'KH'
 
                 // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
                 if (!subjectId) {
-                    subjectId = subjectsElem3.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem3.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
+                    subjectId = subjectsElem2.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem2.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
                     regType = 'HB'
                 }
-
-                // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
-                if (!subjectId) {
-                    subjectId = subjectsElem4.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem4.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
-                    regType = 'KH'
-                }
-
-                // // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
-                // if (!subjectId) {
-                //     subjectId = subjectsElem2.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem2.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
-                //     regType = 'HB'
-                // }
 
                 // Nếu tìm thấy thì tìm tiếp các lớp học của môn đó
                 if (subjectId) {
@@ -77,6 +70,9 @@ async function zicAuto() {
                         if (classId) {
                             console.log(classCode, classId, subject)
                             let result = await zicReg(classCode, classId + '|', subject)
+                            if (result == true) {
+                                alert('Done!')
+                            }
 
                             console.log(subject, classCode, result)
                         } else {
@@ -85,6 +81,7 @@ async function zicAuto() {
                     }
                 } else {
                     console.log(subject, 'Subject Not Found!')
+                    location.href = 'http://regist.hvnh.edu.vn/Login/index'
                 }
             } catch (err) {
                 console.log(subject, err)
@@ -100,28 +97,11 @@ async function zicAuto() {
  * Lấy tất cả danh sách các môn học (trong đó có chứa ID môn học) theo regType
  * @param {String} regType KH hoặc HB
  */
-// async function getSubjects(regType) {
-//     return new Promise((resolve, reject) => {
-//         $.ajax({
-//             type: 'GET',
-//             url: AddressUrl + '/DangKyHocPhan/DanhSachHocPhan?typeId=' + regType,
-//             async: true,
-//             success: function (data) {
-//                 resolve(data)
-//             }
-//         })
-//     })
-// }
-
-/**
- * Lấy tất cả danh sách các môn học (trong đó có chứa ID môn học) theo regType
- * @param {String} regType KH hoặc HB
- */
-async function getSubjects2(regType) {
+async function getSubjects(regType) {
     return new Promise((resolve, reject) => {
         $.ajax({
             type: 'GET',
-            url: AddressUrl + `/DangKyHocPhan/GetDanhSachHP?typeId=${regType}&studyProgramId=${studyProgramId}`,
+            url: AddressUrl + `/DangKyHocPhan/GetDanhSachHP?typeId=${regType}&studyProgramId=17AKTDN`,
             async: true,
             success: function (data) {
                 resolve(data)

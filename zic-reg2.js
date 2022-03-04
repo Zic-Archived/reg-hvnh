@@ -6,15 +6,13 @@
 
 const studyProgramId = '19ATCDN'
 
-// http://regist.hvnh.edu.vn/DangKyHocPhan/GetDanhSachHP?typeId=KH&studyProgramId=19ATCDN
-
 console.log('START!')
 // mã môn học (subject) : danh sách các lớp của môn đó (classCode), cả 2 được định danh bằng subjectId và classID
 window.classList = {
-    'ENG02A': ['212ENG02A01'],
-    'FIN10A': ['212FIN10A01'],
-    'FIN93A': ['212FIN93A01', ], // Thứ tự ưu tiên từ trước đến sau
-    'FIN25A': ['212FIN25A04', ],
+    'FIN51A': ['212FIN51A08'],
+    'FIN84A': ['212FIN84A01'],
+    'FIN93A': ['212FIN93A01',], // Thứ tự ưu tiên từ trước đến sau
+    'FIN25A': ['212FIN25A04',],
     'FIN30A': ['212FIN30A02'],
 }
 window.regClasses = []
@@ -25,17 +23,16 @@ var autoIntv = setInterval(() => {
     zicAuto()
 
     // console.clear()
-}, 800)
+}, 600)
 
 // zicAuto()
 
 async function zicAuto() {
     try {
         // Ban đầu lấy danh sách môn học và danh sách lớp học
-        // let subjectsElem1 = $(await getSubjects('KH')) // Học phần bắt buộc
-        // let subjectsElem2 = $(await getSubjects('HB')) // Học phần tự chọn
-        let subjectsElem3 = $(await getSubjects2('HB')) // Học phần tự chọn v2 (28/12/2021)
-        let subjectsElem4 = $(await getSubjects2('KH')) // Học phần tự chọn v2 (28/12/2021)
+        let subjectsElem1 = $(await getSubjects('KH')) // Học phần bắt buộc
+        let subjectsElem2 = $(await getSubjects('HB')) // Học phần tự chọn
+        // let subjectsElem3 = $(await getSubjects2('HB')) // Học phần tự chọn v2 (28/12/2021)
 
         let subjects = Object.keys(classList)
 
@@ -44,26 +41,20 @@ async function zicAuto() {
                 let subjectId = ''
                 let regType = ''
                 // <a href="javascript:GetClassStudyUnit('yB789N2t8+NOtTH6+dhX+A==','Tiếng Anh IV','HB')"><b>[Đăng ký]</b></a>
-                // subjectId = subjectsElem1.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem1.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
-                // regType = 'KH'
+                subjectId = subjectsElem1.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem1.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
+                regType = 'KH'
 
                 // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
-                if (!subjectId) {
-                    subjectId = subjectsElem3.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem3.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
-                    regType = 'HB'
-                }
-
-                // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
-                if (!subjectId) {
-                    subjectId = subjectsElem4.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem4.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
-                    regType = 'KH'
-                }
-
-                // // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
                 // if (!subjectId) {
-                //     subjectId = subjectsElem2.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem2.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
+                //     subjectId = subjectsElem3.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem3.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
                 //     regType = 'HB'
                 // }
+
+                // Nếu không tìm được học ID môn học trong học phần bắt buộc thì tìm tiếp trong học phần tự chọn
+                if (!subjectId) {
+                    subjectId = subjectsElem2.find(`td:contains(${subject})`).eq(0).parent().find('a').length ? subjectsElem2.find(`td:contains(${subject})`).parent().find('a').eq(0).attr('href').split(`('`)[1].split(`'`)[0] : ''
+                    regType = 'HB'
+                }
 
                 // Nếu tìm thấy thì tìm tiếp các lớp học của môn đó
                 if (subjectId) {
@@ -100,18 +91,18 @@ async function zicAuto() {
  * Lấy tất cả danh sách các môn học (trong đó có chứa ID môn học) theo regType
  * @param {String} regType KH hoặc HB
  */
-// async function getSubjects(regType) {
-//     return new Promise((resolve, reject) => {
-//         $.ajax({
-//             type: 'GET',
-//             url: AddressUrl + '/DangKyHocPhan/DanhSachHocPhan?typeId=' + regType,
-//             async: true,
-//             success: function (data) {
-//                 resolve(data)
-//             }
-//         })
-//     })
-// }
+async function getSubjects(regType) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: 'GET',
+            url: AddressUrl + '/DangKyHocPhan/DanhSachHocPhan?typeId=' + regType,
+            async: true,
+            success: function (data) {
+                resolve(data)
+            }
+        })
+    })
+}
 
 /**
  * Lấy tất cả danh sách các môn học (trong đó có chứa ID môn học) theo regType
