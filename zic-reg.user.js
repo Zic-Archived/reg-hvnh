@@ -17,12 +17,10 @@
 console.log('START!')
 // mã môn học (subject) : danh sách các lớp của môn đó (classCode), cả 2 được định danh bằng subjectId và classID
 window.classList = {
-    'ACT01A': ['212ACT01A01'],
-    // 'FIN51A': ['212FIN51A08'],
-    // 'FIN84A': ['212FIN84A01'],
-    // 'FIN93A': ['212FIN93A01',], // Thứ tự ưu tiên từ trước đến sau
-    // 'FIN25A': ['212FIN25A04',],
-    // 'FIN30A': ['212FIN30A02'],
+    'FIN90A': ['222FIN90A08'],
+    'FIN91A': ['222FIN91A02', '222FIN91A08'],
+    'FIN85A': ['222FIN85A01', '222FIN85A03'],
+     // Thứ tự ưu tiên từ trước đến sau
 }
 window.regClasses = []
 

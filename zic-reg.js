@@ -11,11 +11,18 @@ const studyProgramId = '19ATCDN'
 console.log('START!')
 // mã môn học (subject) : danh sách các lớp của môn đó (classCode), cả 2 được định danh bằng subjectId và classID
 window.classList = {
-    'ENG02A': ['212ENG02A01'],
-    'FIN10A': ['212FIN10A01'],
-    'FIN93A': ['212FIN93A01', ], // Thứ tự ưu tiên từ trước đến sau
-    'FIN25A': ['212FIN25A04', ],
-    'FIN30A': ['212FIN30A02'],
+    'IS20A': ['221IS30A03'],
+    'IS34A': ['221IS34A01'],
+
+    'IS35A': ['221IS35A25'],
+    'ENG04A': ['221ENG04A36', '221ENG04A44'],
+    'IS31A': ['221IS31A02'],
+    'IS33A': ['221IS33A02'],
+
+    // 'FIN75A': ['221FIN75A06'],
+    // 'FIN41A': ['221FIN41A01'],
+    // 'FIN28A': ['221FIN28A04'],
+    // 'FIN04A': ['221FIN04A05',], // Thứ tự ưu tiên từ trước đến sau
 }
 window.regClasses = []
 
